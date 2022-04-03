@@ -2,7 +2,9 @@
 import { ref } from "vue";
 import { DateTime } from "luxon";
 
-const startingDate = DateTime.local(2022, 3, 14).setZone("Asia/Kuala_Lumpur");
+const startingDate = DateTime.local(2022, 3, 14, 0, 0, 0).setZone(
+  "Asia/Kuala_Lumpur"
+);
 const today = DateTime.local().setZone("Asia/Kuala_Lumpur");
 
 const weekdayNumber = today.weekday;
@@ -14,24 +16,24 @@ const weekNumber = today.weekNumber;
 
 const turnGantiPasir = {
   0: "Maryam",
-  1: "Mujahid",
-  2: "Hafsa",
+  1: "Hafsa",
+  2: "Mujahid",
 };
 
 const turnBuangTaik = {
-  0: "Maryam",
-  1: "Mujahid",
+  0: "Mujahid",
+  1: "Maryam",
   2: "Hafsa",
 };
 
-const turnSiapa = () => {
+function turnSiapa() {
   // If Monday, show ganti pasir punya turn
   if (weekdayNumber === 1) {
     return turnGantiPasir[weekNumber % 3];
   }
 
   // If not Monday, show buang taik punya turn
-  function getNumberOfDays(start, end) {
+  const getNumberOfDays = (start, end) => {
     // One day in milliseconds
     const oneDay = 1000 * 60 * 60 * 24;
 
@@ -39,10 +41,10 @@ const turnSiapa = () => {
     const diffInTime = end - start;
 
     // Calculating the no. of days between two dates
-    const diffInDays = Math.round(diffInTime / oneDay);
+    const diffInDays = Math.ceil(diffInTime / oneDay);
 
     return diffInDays;
-  }
+  };
 
   const dayDifference = getNumberOfDays(startingDate, today);
 
@@ -57,7 +59,7 @@ const turnSiapa = () => {
   return turnBuangTaik[
     (dayDifference - countCertainDays([1], startingDate, today)) % 3
   ];
-};
+}
 
 const dahGanti = ref(false);
 </script>
